@@ -13,16 +13,29 @@ using namespace std;
 
 int main()
 {
-    int basis=0,stellen = 0,rest =0 ;
-    //! todo
-    //! sizeof liefert als Einheit bytes deshalb *8!
-    stellen = sizeof(unsigned long)*8;
-    cout << "Stellen: "  << stellen << endl;
-    unsigned long wert=0;
 
-    //! Um einen Speicherüberlauf zu vermeiden
-    //! ermittele ich den maximal moeglichen Wertes:
+    int basis=0,stellen = 0,rest =0 ;
+    unsigned long dezwert=0;
+    bool nocheinmal=false,eingabeOk;
+    string eingabebasis = "Geben sie eine Basiszahl zwischen 2 und 9 (einschliesslich) ein:";
+    string eingabedez = "Geben sie einen positiven umzurechnenden dezimalen Wert ein. Der Wert muss kleiner gleich ";
+    string fehlerbasis = "\nUngueltige Eingabe!\nDie Basiszahl muss zwischen 1 und 10 liegen!";
+    string fehlerdez = "Ungueltige Eingabe - Der Wert muss positiv sein und nicht groesser als ";
+    string ende = "moechten sie noch eine Berechung durchfuehren? (Ja = 1)";
+
+    //! Ermitteln der maximal möglichen Dezimalzahl.
+    //! Zuerst ermittle ich wievele Bits das System darstellen kann.
+    //! Dadurch erhalte ich die maximal notwendigen Stellen
+    //! des Arrays zur Aufnahme der Stellen für die Umgerechnete
+    //! Zahl.
+    stellen = sizeof(unsigned long)*8;
+    //cout << "Stellen: "  << stellen << endl;
+
+
+    //! Berechnen des maximal möglichen Dezimalwertes:
     //! "(basiszahl exponent anzahl der Stellen)-1"
+    //! Basiszahl ist dabei 2 da es sich bei einem Computer um
+    //! ein Binäres System handelt.
     unsigned long maxwert = 1;
     int z=0;
     while(z < 63){
@@ -30,16 +43,17 @@ int main()
         z++;
     }
     maxwert = maxwert + maxwert-1;
-    cout << "maxwert: "  << maxwert << endl;
+    //cout << "maxwert: "  << maxwert << endl;
     //unsigned long maxwert = 18446744073709551615;
-    bool nocheinmal=false,eingabeOk ;
+
+    //! Das Feld fuer die Umgerechnete Zahl:
     unsigned long ergebniss[stellen];
-    string text = "Geben sie einen umzurechnenden dezimalen Wert ein.\nDer Wert muss positiv sein und kleiner als ";
-    string text2 = "Geben sie den umzurechnenden dezimalen Wert ein.\nDer Wert muss positiv sein und nicht groesser als ";
-    string text3 = "Geben sie einen positiven umzurechnenden dezimalen Wert ein: ";
 
 
-    do{//! Abfrage noch eine Berechnung
+
+
+    do{//! Abfrage ob noch eine Berechnung durchgeführt werden soll
+
         //! Initialisierung des Array mit 0;
         for(int i=0;i<stellen;i++){
             ergebniss[i]=0;
@@ -47,108 +61,45 @@ int main()
                 cin.clear();
                 cin.ignore(cin.rdbuf()->in_avail());
                 cin.ignore(BUFSIZ, '\n');
-        do {//! Wir pruefen of die Basiszahl zwischen 1 und 10 liegt
+        do {//! Pruefen of die Basiszahl zwischen 1 und 10 liegt
                 eingabeOk = true;
-                cout << "Geben sie eine Basiszahl zwischen 2 und 9 (einschliesslich) ein:" << endl;
+                cout << eingabebasis << endl;
                 cin >> basis;
                 if(!(basis >1 && basis < 10) || cin.fail()){
-                    cout << "\nUngueltige Eingabe!\nDie Basiszahl muss zwischen 1 und 10 liegen!" << endl;
+                    cout << fehlerbasis << endl;
                     eingabeOk = false;
                     cin.clear();
                     cin.ignore(BUFSIZ, '\n');
                 }
                 else{
-                    //!  Da unser Array nur 16 Stellen hat,
-                    //!  muessen wir die Eingabe auf einen Maximale Wert, welcher mit
-                    //!  "basiszahl exponent anzahl der Stellen-1" ermittelt wurde, beschraenken!
-                    do{
+                    do{//! Prüfen ob ein gültiger Dezimalwert eingegeben wurde
                        eingabeOk = true;
-                       cout << text3 << endl;
-                       cin >> wert;
-                       if(cin.fail() || wert > maxwert){
+                       cout << eingabedez << maxwert << " sein! "<< endl;
+                       cin >> dezwert;
+                       if(cin.fail() || dezwert > maxwert){
                             eingabeOk = false;
                             //cout << "\ungueltige Eingabe!\n";
                             cin.clear();
                             cin.ignore(BUFSIZ, '\n');
                         }
-#ifdef __OUTMESS
-                       switch(basis){
-                                case 2:
-                                cout << text << " 65.536 sein!" << endl;
-                                cin >> wert;
-                                if(wert >65536 || wert < 0){
-                                    eingabeOk = false;
-                                }
-                                break;
-                                case 3:
-                                cout << text << " 43.046.721 sein!" << endl;
-                                cin >> wert;
-                                if(wert >43046721 || wert < 0){
-                                    eingabeOk = false;
-                                }
-                                break;
-                                case 4:
-                                cout << text << " 4.294.967.296 sein!" << endl;
-                                cin >> wert;
-                                if(wert >4294967296 || wert < 0){
-                                    eingabeOk = false;
-                                }
-                                break;
-                                case 5:
-                                cout << text << " 152.587.890.625 sein!" << endl;
-                                cin >> wert;
-                                if(wert >152587890625 || wert < 0){
-                                    eingabeOk = false;
-                                }
-                                break;
-                                case 6:
-                                cout << text << "2.821.109.907.456 sein!" << endl;
-                                cin >> wert;
-                                if(wert >2821109907456 || wert < 0){
-                                    eingabeOk = false;
-                                }
-                                break;
-                                case 7:
-                                cout << text << " 33.232.930.569.601 sein!" << endl;
-                                cin >> wert;
-                                if(wert >33232930569601 || wert < 0){
-                                    eingabeOk = false;
-                                }
-                                break;
-                                case 8:
-                                cout << text<< " 281.474.976.710.656 sein!" << endl;
-                                cin >> wert;
-                                if(wert >281474976710656 || wert < 0){
-                                    eingabeOk = false;
-                                }
-                                break;
-                                case 9:
-                                cout << text<< " 1.853.020.188.851.840 sein!" << endl;
-                                cin >> wert;
-                                if(wert >1853020188851840 || wert < 0){
-                                    eingabeOk = false;
-                                }
-                                break;
-                            }
-#endif
+
                             if(!eingabeOk){
-                                cout << "Ungueltige Eingabe - Der Wert muss positiv sein und nicht groesser als " << maxwert << "!\n";
+                                cout << fehlerdez << maxwert << "!\n";
 
                             }
                     }while(!eingabeOk);
 
-                    cout << "\nIhre Eingabe:\nDezimalwert: " << wert << "\nBasiszahl: "<< basis << endl <<
+                    cout << "\nIhre Eingabe:\nDezimalwert: " << dezwert << "\nBasiszahl: "<< basis << endl <<
                     "\nErgebniss";
                     int z = 0;
                     //! Umrechnung:
                     do{
-                        rest = wert%basis;
-                        //out << endl << z << " " << wert << " % " << basis << " = rest: "<< rest << ", wert: ";
-                        wert = wert/basis;
-                        //cout << wert << endl;
+                        rest = dezwert%basis;
                         ergebniss[z] = rest;
+                        dezwert /=basis;
                         z++;
-                    } while(wert && z< stellen);
+                    } while(dezwert && z< stellen);
+
                     //! Ausgabe des Ergebnisses:
                     if(basis == 2){
                         cout << " (dual):\n";
@@ -157,7 +108,7 @@ int main()
                         cout << " (octal):\n";
                     }
                     else
-                        cout << ":\n";
+                        cout << "zahl mit der Basis "<< basis <<":\n";
                     //! Unnoetige Nullwerte am Beginn der Ergenisses entfernen:
                     bool skip_0 = true;
                     for(int i=stellen-1;i>=0;i--){
@@ -177,7 +128,7 @@ int main()
                     cout << endl << endl;
                 }
         }while (!eingabeOk);
-        cout << "moechten sie noch eine Berechung durchfuehren? (Ja = 1)" << endl;
+        cout << ende << endl;
         cin >> nocheinmal;
 
         if(cin.fail()){
