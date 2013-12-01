@@ -1,4 +1,7 @@
 #include <iostream>
+//! fuer mingw unter win7 damit BUFSIZ definition gefunden wird:
+#include <cstdio>
+
 /*
 Programm zum Umrechnen einer Dezimalzahl
 in ein beliebigs Zahlenformat der Basiszahl
@@ -43,7 +46,7 @@ int main()
         }
                 cin.clear();
                 cin.ignore(cin.rdbuf()->in_avail());
-                //cin.ignore(BUFSIZ, '\n');
+                cin.ignore(BUFSIZ, '\n');
         do {//! Wir pruefen of die Basiszahl zwischen 1 und 10 liegt
                 eingabeOk = true;
                 cout << "Geben sie eine Basiszahl zwischen 2 und 9 (einschliesslich) ein:" << endl;
@@ -68,7 +71,7 @@ int main()
                             cin.clear();
                             cin.ignore(BUFSIZ, '\n');
                         }
-
+#ifdef __OUTMESS
                        switch(basis){
                                 case 2:
                                 cout << text << " 65.536 sein!" << endl;
@@ -127,7 +130,7 @@ int main()
                                 }
                                 break;
                             }
-
+#endif
                             if(!eingabeOk){
                                 cout << "Ungueltige Eingabe - Der Wert muss positiv sein und nicht groesser als " << maxwert << "!\n";
 
