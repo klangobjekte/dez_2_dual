@@ -14,7 +14,7 @@ using namespace std;
 int main()
 {
 
-    int basis=0,stellen = 0,rest =0 ;
+    int basis=0,stellen = 0 ;
     unsigned long dezwert=0;
     bool nocheinmal=false,eingabeOk;
     string eingabebasis = "Geben sie eine Basiszahl zwischen 2 und 9 (einschliesslich) ein:";
@@ -87,8 +87,7 @@ int main()
                     int z = 0;
                     //! Umrechnung:
                     do{
-                        rest = dezwert%basis;
-                        ergebniss[z] = rest;
+                        ergebniss[z] = dezwert%basis;
                         dezwert /=basis;
                         z++;
                     } while(dezwert && z< stellen);
