@@ -23,13 +23,9 @@ int main()
     string fehlerdez = "Ungueltige Eingabe - Der Wert muss positiv sein und nicht groesser als ";
     string ende = "moechten sie noch eine Berechung durchfuehren? (Ja = 1)";
 
-    //! Ermitteln der maximal möglichen Dezimalzahl.
-    //! Zuerst ermittle ich wievele Bits das System darstellen kann.
-    //! Dadurch erhalte ich die maximal notwendigen Stellen
-    //! des Arrays zur Aufnahme der Stellen für die Umgerechnete
-    //! Zahl.
+    //! Ermitteln wieviel Bits das System darstellen kann:
     stellen = sizeof(unsigned long)*8;
-    //cout << "Stellen: "  << stellen << endl;
+    cout << "Stellen: "  << stellen << endl;
 
 
     //! Berechnen des maximal möglichen Dezimalwertes:
@@ -38,29 +34,26 @@ int main()
     //! ein Binäres System handelt.
     unsigned long maxwert = 1;
     int z=0;
-    while(z < 63){
+    while(z < stellen-1){
          maxwert = maxwert*2;
         z++;
     }
     maxwert = maxwert + maxwert-1;
-    //cout << "maxwert: "  << maxwert << endl;
-    //unsigned long maxwert = 18446744073709551615;
+    cout << "maxwert: "  << maxwert << endl;
+
 
     //! Das Feld fuer die Umgerechnete Zahl:
     unsigned long ergebniss[stellen];
 
-
-
-
-    do{//! Abfrage ob noch eine Berechnung durchgeführt werden soll
+    do{//! Abfrage ob das Programm beendet werden soll
 
         //! Initialisierung des Array mit 0;
         for(int i=0;i<stellen;i++){
             ergebniss[i]=0;
         }
-                cin.clear();
-                cin.ignore(cin.rdbuf()->in_avail());
-                cin.ignore(BUFSIZ, '\n');
+        cin.clear();
+        cin.ignore(cin.rdbuf()->in_avail());
+        cin.ignore(BUFSIZ, '\n');
         do {//! Pruefen of die Basiszahl zwischen 1 und 10 liegt
                 eingabeOk = true;
                 cout << eingabebasis << endl;
